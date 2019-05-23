@@ -17,7 +17,9 @@ public class HexGrid : MonoBehaviour
     Canvas gridCanvas; // parent für text
 
     HexMesh hexMesh; // das hexagon mesh
-    MeshCollider meshCollider; // der collider des Hexagons
+
+    public Color defaultColor = Color.white; // standart farbe
+
 
     void Awake()
     {
@@ -39,37 +41,21 @@ public class HexGrid : MonoBehaviour
     {
         hexMesh.Triangulate(cells);
     }
-    //------------------------------------
-    void Update()
-    {
-        //user input
-        if (Input.GetMouseButton(0))
-        {
-            HandleInput(); 
-        }
-    }
-    /// <summary>
-    /// holt sich die zelle auf die der spieler geklickt hat
-    /// </summary>
-    void HandleInput()
-    {
-        Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(inputRay, out hit))
-        {
-            TouchCell(hit.point);
-        }
-    }
+
     /// <summary>
     /// gibt die zelle zurück an der angegebenen position
     /// </summary>
     /// <param name="position"></param>
-    void TouchCell(Vector3 position)
+    public void ColorCell(Vector3 position, Color color)
     {
         position = transform.InverseTransformPoint(position);
-        Debug.Log("touched at " + position);
+        HexCoordinates coordinates = HexCoordinates.FromPosition(position);
+        int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
+        HexCell cell = cells[index];
+        cell.color = color;
+        hexMesh.Triangulate(cells);
     }
-    //--------------------------------------
+
 
     /// <summary>
     ///  instanzier das prefab für hexagons und setzt alle nötigen positionen und daten
@@ -89,6 +75,32 @@ public class HexGrid : MonoBehaviour
         cell.transform.SetParent(transform, false); // setzt den parent für das object
         cell.transform.localPosition = position; // setzt die position
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z); //setzt neue offset coordinaten zum einfacheren navigieren
+        cell.color = defaultColor; // die standart farbe wird auf das mesh gesetzt
+
+        if (x > 0)
+        {
+            cell.SetNeighbor(HexDirection.W, cells[i - 1]); // hexagon links neben diesem hat den index: index-1
+        }
+        if (z > 0)
+        {
+            if ((z & 1) == 0) // & == AND für bits
+            {
+                cell.SetNeighbor(HexDirection.SE, cells[i - width]); // hexagon untenrechts hat den index : index - breite des spielfelds
+                if (x > 0)
+                {
+                    cell.SetNeighbor(HexDirection.SW, cells[i - width - 1]); // index - breite - 1 (untenlinks)
+                }
+            }
+            else
+            {
+                cell.SetNeighbor(HexDirection.SW, cells[i - width]); // index - breite (untenlinks)
+                if (x < width - 1)
+                {
+                    cell.SetNeighbor(HexDirection.SE, cells[i - width + 1]); // index - breite + 1 (untenrechts)
+                }
+            }
+        }
+
 
         Text label = Instantiate<Text>(cellLabelPrefab); // instanziert das text prefab 
         label.rectTransform.SetParent(gridCanvas.transform, false); // setzt den parent auf das Canavs
