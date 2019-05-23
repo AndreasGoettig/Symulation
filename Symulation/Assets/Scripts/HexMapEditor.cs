@@ -63,10 +63,8 @@ public class HexMapEditor : MonoBehaviour {
     /// inpu abfrage ob die linke moustaste gedrückt wurde
     /// </summary>
 	void Update () {
-		if (
-			Input.GetMouseButton(0) &&
-			!EventSystem.current.IsPointerOverGameObject()
-		) {
+		if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        {
 			HandleInput();
 		}
 	}
