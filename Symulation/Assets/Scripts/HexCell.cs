@@ -2,25 +2,31 @@
 
 public class HexCell : MonoBehaviour {
 
-	public HexCoordinates coordinates;
+	public HexCoordinates coordinates; //referenz zu den hexcoordinaten
 
-	public RectTransform uiRect;
+	public RectTransform uiRect; //Transform der UI
 
-	public HexGridChunk chunk;
+	public HexGridChunk chunk; // referenz zu HexGridChunk
 
-	public Color Color {
-		get {
+	public Color Color
+    {
+		get
+        {
 			return color;
 		}
-		set {
-			if (color == value) {
+		set
+        {
+			if (color == value)
+            {
 				return;
 			}
 			color = value;
 			Refresh();
 		}
 	}
-
+    /// <summary>
+    ///gibt elevation und setzt die position des hexagons auf die gewünschte höhe
+    /// </summary>
 	public int Elevation {
 		get {
 			return elevation;
@@ -43,7 +49,9 @@ public class HexCell : MonoBehaviour {
 			Refresh();
 		}
 	}
-
+    /// <summary>
+    /// gibt die position der zelle zurück
+    /// </summary>
 	public Vector3 Position {
 		get {
 			return transform.localPosition;
@@ -52,32 +60,50 @@ public class HexCell : MonoBehaviour {
 
 	Color color;
 
-	int elevation = int.MinValue;
+	int elevation = int.MinValue; // elevation ist standartmäßig auf dem niedrigsten wert
 
 	[SerializeField]
-	HexCell[] neighbors;
-
+	HexCell[] neighbors; //liste aller 6 nachbarn
+    /// <summary>
+    /// returnt den nachbarn in der gewünschten richtung
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
 	public HexCell GetNeighbor (HexDirection direction) {
 		return neighbors[(int)direction];
 	}
-
-	public void SetNeighbor (HexDirection direction, HexCell cell) {
+    /// <summary>
+    /// setzt die nachbarn im array
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <param name="cell"></param>
+    public void SetNeighbor (HexDirection direction, HexCell cell) {
 		neighbors[(int)direction] = cell;
 		cell.neighbors[(int)direction.Opposite()] = this;
 	}
-
+    /// <summary>
+    /// returnt den typ der kante über die gewünschte richtung
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
 	public HexEdgeType GetEdgeType (HexDirection direction) {
 		return HexMetrics.GetEdgeType(
 			elevation, neighbors[(int)direction].elevation
 		);
 	}
-
+    /// <summary>
+    /// gibt die gewünschte kante zu dem nachbarn
+    /// </summary>
+    /// <param name="otherCell"></param>
+    /// <returns></returns>
 	public HexEdgeType GetEdgeType (HexCell otherCell) {
 		return HexMetrics.GetEdgeType(
 			elevation, otherCell.elevation
 		);
 	}
-
+    /// <summary>
+    /// updated die zellen und die chunks
+    /// </summary>
 	void Refresh () {
 		if (chunk) {
 			chunk.Refresh();

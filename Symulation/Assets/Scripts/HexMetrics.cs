@@ -2,7 +2,8 @@
 /// <summary>
 /// alle daten rund um das Hexagon
 /// </summary>
-public static class HexMetrics {
+public static class HexMetrics
+{
     //der innere und äußere kreis aus dem das Hexagon erstellt wird
     public const float outerRadius = 10f;
 	public const float innerRadius = outerRadius * 0.866025404f;// laut wikipedia die perfecte abstand zwischen den beiden kreisen. <- sqrt(3)/5
@@ -30,7 +31,8 @@ public static class HexMetrics {
     //die größe der chunks (hier 5 * 5 also 25 hexagons pro chunk)
 	public const int chunkSizeX = 5, chunkSizeZ = 5;
 
-	static Vector3[] corners = {
+	static Vector3[] corners = 
+    {
 		new Vector3(0f, 0f, outerRadius),// top
 		new Vector3(innerRadius, 0f, 0.5f * outerRadius),// topright
 		new Vector3(innerRadius, 0f, -0.5f * outerRadius),// topleft
@@ -44,7 +46,8 @@ public static class HexMetrics {
 	public static Texture2D noiseSource;
 
     //mesh wird leicht deformiert
-	public static Vector4 SampleNoise (Vector3 position) {
+	public static Vector4 SampleNoise (Vector3 position)
+    {
 		return noiseSource.GetPixelBilinear(
 			position.x * noiseScale,
 			position.z * noiseScale
@@ -56,7 +59,8 @@ public static class HexMetrics {
     /// </summary>
     /// <param name="direction"></param>
     /// <returns></returns>
-    public static Vector3 GetFirstCorner (HexDirection direction) {
+    public static Vector3 GetFirstCorner (HexDirection direction)
+    {
 		return corners[(int)direction];
 	}
     /// <summary>
@@ -64,7 +68,8 @@ public static class HexMetrics {
     /// </summary>
     /// <param name="direction"></param>
     /// <returns></returns>
-    public static Vector3 GetSecondCorner (HexDirection direction) {
+    public static Vector3 GetSecondCorner (HexDirection direction)
+    {
 		return corners[(int)direction + 1];
 	}
     /// <summary>
@@ -72,7 +77,8 @@ public static class HexMetrics {
     /// </summary>
     /// <param name="direction"></param>
     /// <returns></returns>
-    public static Vector3 GetFirstSolidCorner (HexDirection direction) {
+    public static Vector3 GetFirstSolidCorner (HexDirection direction)
+    {
 		return corners[(int)direction] * solidFactor;
 	}
     /// <summary>
@@ -80,7 +86,8 @@ public static class HexMetrics {
     /// </summary>
     /// <param name="direction"></param>
     /// <returns></returns>
-    public static Vector3 GetSecondSolidCorner (HexDirection direction) {
+    public static Vector3 GetSecondSolidCorner (HexDirection direction)
+    {
 		return corners[(int)direction + 1] * solidFactor;
 	}
     /// <summary>
@@ -89,8 +96,7 @@ public static class HexMetrics {
     /// <param name="direction"></param>
     /// <returns></returns>
     public static Vector3 GetBridge (HexDirection direction) {
-		return (corners[(int)direction] + corners[(int)direction + 1]) *
-			blendFactor;
+		return (corners[(int)direction] + corners[(int)direction + 1]) * blendFactor;
 	}
     /// <summary>
     /// interpoliert zwischen anfang a und ende b in step schritten
@@ -99,7 +105,8 @@ public static class HexMetrics {
     /// <param name="b"></param>
     /// <param name="step"></param>
     /// <returns></returns>
-	public static Vector3 TerraceLerp (Vector3 a, Vector3 b, int step) {
+	public static Vector3 TerraceLerp (Vector3 a, Vector3 b, int step)
+    {
 		float h = step * HexMetrics.horizontalTerraceStepSize;
 		a.x += (b.x - a.x) * h;
 		a.z += (b.z - a.z) * h;
@@ -114,7 +121,8 @@ public static class HexMetrics {
     /// <param name="b"></param>
     /// <param name="step"></param>
     /// <returns></returns>
-	public static Color TerraceLerp (Color a, Color b, int step) {
+	public static Color TerraceLerp (Color a, Color b, int step)
+    {
 		float h = step * HexMetrics.horizontalTerraceStepSize;
 		return Color.Lerp(a, b, h);
 	}
@@ -124,7 +132,8 @@ public static class HexMetrics {
     /// <param name="elevation1"></param>
     /// <param name="elevation2"></param>
     /// <returns></returns>
-	public static HexEdgeType GetEdgeType (int elevation1, int elevation2) {
+	public static HexEdgeType GetEdgeType (int elevation1, int elevation2)
+    {
 		if (elevation1 == elevation2) {
 			return HexEdgeType.Flat;
 		}

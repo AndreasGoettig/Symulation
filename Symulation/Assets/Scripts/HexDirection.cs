@@ -1,5 +1,11 @@
-﻿public enum HexDirection {
-	NE, E, SE, SW, W, NW
+﻿public enum HexDirection //enum zu den verschiedenen nachbarn jedes Hexagons
+{
+	NE,
+    E,
+    SE,
+    SW,
+    W,
+    NW
 }
 
 public static class HexDirectionExtensions {

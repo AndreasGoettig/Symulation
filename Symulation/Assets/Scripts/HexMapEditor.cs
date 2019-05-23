@@ -3,46 +3,65 @@ using UnityEngine.EventSystems;
 
 public class HexMapEditor : MonoBehaviour {
 
-	public Color[] colors;
+	public Color[] colors; //color array für die user auswahl
 
-	public HexGrid hexGrid;
+	public HexGrid hexGrid; //referenz zu dem grid
 
-	int activeElevation;
+	int activeElevation; //stufe der erhöhung
 
-	Color activeColor;
+	Color activeColor; // die aktive farbe
 
-	int brushSize;
+	int brushSize; // pinselgröße
 
-	bool applyColor;
-	bool applyElevation = true;
-
+	bool applyColor; // bool ob farbe hinzugefügt wird
+	bool applyElevation = true; // bool ob höhe verändert werden soll
+    /// <summary>
+    /// farbe wird auf den wert der togglebar gesetzt
+    /// </summary>
+    /// <param name="index"></param>
 	public void SelectColor (int index) {
 		applyColor = index >= 0;
 		if (applyColor) {
 			activeColor = colors[index];
 		}
 	}
-
+    /// <summary>
+    /// toggle zwischen benutze hhenunterschiede und benutze keine höhenunterschiede
+    /// </summary>
+    /// <param name="toggle"></param>
 	public void SetApplyElevation (bool toggle) {
 		applyElevation = toggle;
 	}
-
+    /// <summary>
+    /// setzt die elevation auf die ausgewählte elevationsttufe
+    /// </summary>
+    /// <param name="elevation"></param>
 	public void SetElevation (float elevation) {
 		activeElevation = (int)elevation;
 	}
-
+    /// <summary>
+    /// setzt die pinselgröße
+    /// </summary>
+    /// <param name="size"></param>
 	public void SetBrushSize (float size) {
 		brushSize = (int)size;
 	}
-
+    /// <summary>
+    /// bool ob die positionen der hexagons als label angezeigt werden sollen
+    /// </summary>
+    /// <param name="visible"></param>
 	public void ShowUI (bool visible) {
 		hexGrid.ShowUI(visible);
 	}
-
+    /// <summary>
+    /// setzt beim start die start farbe auf die erste stelle im farb array
+    /// </summary>
 	void Awake () {
 		SelectColor(0);
 	}
-
+    /// <summary>
+    /// inpu abfrage ob die linke moustaste gedrückt wurde
+    /// </summary>
 	void Update () {
 		if (
 			Input.GetMouseButton(0) &&
@@ -51,7 +70,9 @@ public class HexMapEditor : MonoBehaviour {
 			HandleInput();
 		}
 	}
-
+    /// <summary>
+    /// wählt den angeklickten hexagon und bearbeitet ihn
+    /// </summary>
 	void HandleInput () {
 		Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
@@ -59,7 +80,10 @@ public class HexMapEditor : MonoBehaviour {
 			EditCells(hexGrid.GetCell(hit.point));
 		}
 	}
-
+    /// <summary>
+    /// bearbeited den ausgewählten hexagon
+    /// </summary>
+    /// <param name="center"></param>
 	void EditCells (HexCell center) {
 		int centerX = center.coordinates.X;
 		int centerZ = center.coordinates.Z;
@@ -75,7 +99,10 @@ public class HexMapEditor : MonoBehaviour {
 			}
 		}
 	}
-
+    /// <summary>
+    /// setzt die hhe und die farbe des hexagons
+    /// </summary>
+    /// <param name="cell"></param>
 	void EditCell (HexCell cell) {
 		if (cell) {
 			if (applyColor) {

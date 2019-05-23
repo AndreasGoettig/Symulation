@@ -10,7 +10,13 @@ public struct EdgeVertices {
 		v3 = Vector3.Lerp(corner1, corner2, 2f / 3f);
 		v4 = corner2;
 	}
-
+    /// <summary>
+    /// gibt das ergebnis der lerbs zwischen dein einzelnen kanten zurück
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="step"></param>
+    /// <returns></returns>
 	public static EdgeVertices TerraceLerp (
 		EdgeVertices a, EdgeVertices b, int step)
 	{

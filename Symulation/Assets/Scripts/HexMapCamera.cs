@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
-
-public class HexMapCamera : MonoBehaviour {
+/// <summary>
+/// sterung für die playercamera
+/// </summary>
+public class HexMapCamera : MonoBehaviour
+{
 
 	public float stickMinZoom, stickMaxZoom;
 
@@ -18,19 +21,23 @@ public class HexMapCamera : MonoBehaviour {
 
 	float rotationAngle;
 
-	void Awake () {
+	void Awake ()
+    {
 		swivel = transform.GetChild(0);
 		stick = swivel.GetChild(0);
 	}
 
-	void Update () {
+	void Update ()
+    {
 		float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
-		if (zoomDelta != 0f) {
+		if (zoomDelta != 0f)
+        {
 			AdjustZoom(zoomDelta);
 		}
 
 		float rotationDelta = Input.GetAxis("Rotation");
-		if (rotationDelta != 0f) {
+		if (rotationDelta != 0f)
+        {
 			AdjustRotation(rotationDelta);
 		}
 
@@ -40,8 +47,12 @@ public class HexMapCamera : MonoBehaviour {
 			AdjustPosition(xDelta, zDelta);
 		}
 	}
-
-	void AdjustZoom (float delta) {
+    /// <summary>
+    /// passt den zoom der camera an
+    /// </summary>
+    /// <param name="delta"></param>
+	void AdjustZoom (float delta)
+    {
 		zoom = Mathf.Clamp01(zoom + delta);
 
 		float distance = Mathf.Lerp(stickMinZoom, stickMaxZoom, zoom);
@@ -50,19 +61,29 @@ public class HexMapCamera : MonoBehaviour {
 		float angle = Mathf.Lerp(swivelMinZoom, swivelMaxZoom, zoom);
 		swivel.localRotation = Quaternion.Euler(angle, 0f, 0f);
 	}
-
-	void AdjustRotation (float delta) {
+    /// <summary>
+    /// asst die rotation der camera an
+    /// </summary>
+    /// <param name="delta"></param>
+	void AdjustRotation (float delta)
+    {
 		rotationAngle += delta * rotationSpeed * Time.deltaTime;
 		if (rotationAngle < 0f) {
 			rotationAngle += 360f;
 		}
-		else if (rotationAngle >= 360f) {
+		else if (rotationAngle >= 360f)
+        {
 			rotationAngle -= 360f;
 		}
 		transform.localRotation = Quaternion.Euler(0f, rotationAngle, 0f);
 	}
-
-	void AdjustPosition (float xDelta, float zDelta) {
+    /// <summary>
+    /// past die position der camera an
+    /// </summary>
+    /// <param name="xDelta"></param>
+    /// <param name="zDelta"></param>
+	void AdjustPosition (float xDelta, float zDelta)
+    {
 		Vector3 direction =
 			transform.localRotation *
 			new Vector3(xDelta, 0f, zDelta).normalized;
@@ -75,8 +96,13 @@ public class HexMapCamera : MonoBehaviour {
 		position += direction * distance;
 		transform.localPosition = ClampPosition(position);
 	}
-
-	Vector3 ClampPosition (Vector3 position) {
+    /// <summary>
+    /// clampt die position der camera
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+	Vector3 ClampPosition (Vector3 position)
+    {
 		float xMax =
 			(grid.chunkCountX * HexMetrics.chunkSizeX - 0.5f) *
 			(2f * HexMetrics.innerRadius);
