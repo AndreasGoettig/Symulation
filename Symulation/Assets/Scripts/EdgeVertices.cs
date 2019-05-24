@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
-
+/// <summary>
+/// daten für die Verticies der Ecken
+/// </summary>
 public struct EdgeVertices {
 
 	public Vector3 v1, v2, v3, v4;

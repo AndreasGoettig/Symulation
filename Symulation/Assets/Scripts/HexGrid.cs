@@ -15,7 +15,7 @@ public class HexGrid : MonoBehaviour {
 
 	public Texture2D noiseSource; // staic noise texture (wegen vorschau, sonst andere noisetexturen möglich)
 
-	HexGridChunk[] chunks; // array der chunks
+	public HexGridChunk[] chunks; // array der chunks
 	HexCell[] cells; // arra alles cellen
 
 	int cellCountX, cellCountZ; //anzahl der zellen in x unud z richtung
